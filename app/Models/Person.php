@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\{
     Model,
     Relations\BelongsTo
 };
+use Carbon\Carbon;
 
 /**
  * @property int $id
@@ -45,19 +46,11 @@ class Person extends Model
     ];
 
     /**
-     * @return int|null
-     * @throws \Exception
+     * @return int
      */
-    public function getAgeAttribute(): ?int
+    public function getAgeAttribute(): int
     {
-        $d = date_parse($this->birth_date);
-        if (false === $d) {
-            return null;
-        }
-
-        return \DateTime::createFromFormat('Y-m-d', "{$d['year']}-{$d['month']}-{$d['day']}")
-            ->diff(new \DateTime())
-            ->y;
+        return Carbon::parse($this->birth_date)->age;
     }
 
     /**
